@@ -20,10 +20,13 @@ def style():
     return send_file("style.css", mimetype="text/css")
 CORS(app)
 
-HF_TOKEN = os.getenv("HF_TOKEN")
+HF_TOKEN = os.environ.get("HF_TOKEN")
 
-if not HF_TOKEN:
-    raise RuntimeError("HF_TOKEN .env file me nahi mila")
+if HF_TOKEN is None:
+    HF_TOKEN = ""
+
+if not HF_TOKEN.strip():
+    print("WARNING: HF_TOKEN environment variable is empty or missing")
 
 client = InferenceClient(
     provider="hf-inference",
