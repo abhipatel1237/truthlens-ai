@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
@@ -8,6 +8,9 @@ import tempfile
 load_dotenv()
 
 app = Flask(__name__)
+@app.route("/")
+def home():
+    return send_file("index.html")
 CORS(app)
 
 HF_TOKEN = os.getenv("HF_TOKEN")
