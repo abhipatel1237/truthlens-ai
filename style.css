@@ -1,0 +1,88 @@
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:#1e293b;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    width:350px;
+}
+
+h1{
+    color:#38bdf8;
+}
+
+button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+#analyzeButton {
+    margin-top: 15px;
+    background: #16a34a;
+}
+
+#analyzeButton:hover {
+    background: #15803d;
+}
+
+#preview {
+    margin-top: 20px;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    background: #0f172a;
+}
+.score-section {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0 6px;
+}
+
+.score-bar {
+    width: 100%;
+    height: 12px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.score-fill {
+    height: 100%;
+    background: #22c55e;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.disclaimer {
+    margin-top: 25px;
+    font-size: 13px;
+    opacity: 0.6;
+}

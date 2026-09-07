@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TruthLens</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>TruthLens</h1>
+
+        <p>AI Image & Video Detection</p>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept="image/*,video/*"
+            hidden
+        >
+
+        <button id="uploadButton">
+            Upload File
+        </button>
+<button id="analyzeButton" style="display:none;">
+    Analyze File
+</button>
+
+<div id="result"></div>
+        <div id="preview"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
