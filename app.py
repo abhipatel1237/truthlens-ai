@@ -11,6 +11,13 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return send_file("index.html")
+    @app.route("/script.js")
+def script():
+    return send_file("script.js", mimetype="application/javascript")
+
+@app.route("/style.css")
+def style():
+    return send_file("style.css", mimetype="text/css")
 CORS(app)
 
 HF_TOKEN = os.getenv("HF_TOKEN")
