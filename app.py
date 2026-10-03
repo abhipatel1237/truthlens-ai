@@ -5,27 +5,48 @@ from huggingface_hub import InferenceClient
 import os
 import tempfile
 
+# Load local .env
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
+
+# Project folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+# =========================
+# FRONTEND FILES
+# =========================
+
 @app.route("/")
 def home():
-    return send_file("index.html")
-    @app.route("/script.js")
+    return send_file(os.path.join(BASE_DIR, "index.html"))
+
+
+@app.route("/script.js")
 def script():
-    return send_file("script.js", mimetype="application/javascript")
+    return send_file(
+        os.path.join(BASE_DIR, "script.js"),
+        mimetype="application/javascript"
+    )
+
 
 @app.route("/style.css")
 def style():
-    return send_file("style.css", mimetype="text/css")
-CORS(app)
+    return send_file(
+        os.path.join(BASE_DIR, "style.css"),
+        mimetype="text/css"
+    )
 
-HF_TOKEN = os.environ.get("HF_TOKEN")
 
-if HF_TOKEN is None:
-    HF_TOKEN = ""
+# =========================
+# HUGGING FACE
+# =========================
 
-if not HF_TOKEN.strip():
+HF_TOKEN = os.environ.get("HF_TOKEN", "").strip()
+
+if not HF_TOKEN:
     print("WARNING: HF_TOKEN environment variable is empty or missing")
 
 client = InferenceClient(
@@ -36,6 +57,10 @@ client = InferenceClient(
 MODEL_ID = "haywoodsloan/ai-image-detector-deploy"
 
 
+# =========================
+# HEALTH CHECK
+# =========================
+
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({
@@ -43,19 +68,30 @@ def health():
     })
 
 
+# =========================
+# IMAGE ANALYSIS
+# =========================
+
 @app.route("/analyze", methods=["POST"])
 def analyze():
 
     if "file" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
+        return jsonify({
+            "success": False,
+            "error": "No file uploaded"
+        }), 400
 
     file = request.files["file"]
 
     if not file.filename:
-        return jsonify({"error": "No file selected"}), 400
+        return jsonify({
+            "success": False,
+            "error": "No file selected"
+        }), 400
 
     if not file.content_type or not file.content_type.startswith("image/"):
         return jsonify({
+            "success": False,
             "error": "Abhi sirf images supported hain"
         }), 400
 
@@ -92,6 +128,8 @@ def analyze():
 
     except Exception as e:
 
+        print("ANALYZE ERROR:", str(e))
+
         return jsonify({
             "success": False,
             "error": str(e)
@@ -103,9 +141,15 @@ def analyze():
             os.remove(temp_path)
 
 
+# =========================
+# START SERVER
+# =========================
+
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+
     app.run(
-        host="127.0.0.1",
-        port=5000,
-        debug=True
+        host="0.0.0.0",
+        port=port,
+        debug=False
     )
