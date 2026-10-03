@@ -6,7 +6,6 @@ const result = document.getElementById("result");
 
 let selectedFile = null;
 
-
 // =========================
 // UPLOAD BUTTON
 // =========================
@@ -14,7 +13,6 @@ let selectedFile = null;
 uploadButton.addEventListener("click", function () {
     fileInput.click();
 });
-
 
 // =========================
 // FILE SELECT
@@ -40,19 +38,15 @@ fileInput.addEventListener("change", function () {
     if (!file.type.startsWith("image/")) {
 
         preview.innerHTML = `
-            <p>
-                Please select an image file.
-            </p>
+            <p>Please select an image file.</p>
         `;
 
         analyzeButton.style.display = "none";
         uploadButton.style.display = "inline-block";
-
         selectedFile = null;
 
         return;
     }
-
 
     // =========================
     // IMAGE PREVIEW
@@ -61,13 +55,11 @@ fileInput.addEventListener("change", function () {
     const image = document.createElement("img");
 
     image.src = URL.createObjectURL(file);
-
     image.style.maxWidth = "100%";
     image.style.maxHeight = "300px";
     image.style.borderRadius = "12px";
 
     preview.appendChild(image);
-
 
     // =========================
     // BUTTON CHANGES
@@ -83,7 +75,6 @@ fileInput.addEventListener("change", function () {
     analyzeButton.style.margin = "15px auto 0";
 });
 
-
 // =========================
 // ANALYZE BUTTON
 // =========================
@@ -94,19 +85,15 @@ analyzeButton.addEventListener("click", async function () {
         return;
     }
 
-
     // Button disable while analyzing
     analyzeButton.disabled = true;
-
     analyzeButton.innerText = "Analyzing...";
-
 
     // Loading message
     result.innerHTML = `
         <h2>Analyzing...</h2>
         <p>Please wait while TruthLens checks the image.</p>
     `;
-
 
     try {
 
@@ -115,19 +102,16 @@ analyzeButton.addEventListener("click", async function () {
 
         formData.append("file", selectedFile);
 
-
-        // Backend ko image bhejna
+        // LIVE RENDER BACKEND
         const response = await fetch(
-            "http://127.0.0.1:5000/analyze",
+            "/analyze",
             {
                 method: "POST",
                 body: formData
             }
         );
 
-
         const data = await response.json();
-
 
         // Backend error
         if (!response.ok || !data.success) {
@@ -136,7 +120,6 @@ analyzeButton.addEventListener("click", async function () {
                 data.error || "Analysis failed"
             );
         }
-
 
         // =========================
         // REAL MODEL RESULT
@@ -159,7 +142,6 @@ analyzeButton.addEventListener("click", async function () {
             `;
         });
 
-
         result.innerHTML = `
             <h2>Analysis Result</h2>
 
@@ -170,10 +152,7 @@ analyzeButton.addEventListener("click", async function () {
             </p>
         `;
 
-    }
-
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
@@ -185,20 +164,15 @@ analyzeButton.addEventListener("click", async function () {
             </p>
 
             <p style="font-size:12px;">
-                Make sure the TruthLens backend is running.
+                Please try again.
             </p>
         `;
 
-    }
-
-
-    finally {
+    } finally {
 
         // Button wapas normal
         analyzeButton.disabled = false;
-
         analyzeButton.innerText = "Analyze File";
-
     }
 
 });
